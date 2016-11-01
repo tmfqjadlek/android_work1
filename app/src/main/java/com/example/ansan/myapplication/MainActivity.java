@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.File;
@@ -19,11 +20,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
-
+    EditText e1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        e1 = (EditText)findViewById(R.id.editText);
     }
     public void onclick(View v){
         if(isStoragePermissionGranted()==false){
@@ -59,9 +61,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.button4: //파일읽기
-                FileInputStream fos = null;
                 try {
-                    fos = new FileInputStream(filename);
+                    FileInputStream fos = new FileInputStream(filename);
                     byte arr[]=new byte[fos.available()];
                     fos.read();
                     fos.close();
@@ -72,6 +73,18 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                break;
+            case R.id.button5: //폴더 목록 가져오기
+                String str = "";
+                File[] filelist = new File(path).listFiles();
+                for(int i= 0; i < filelist.length; i++){
+                    if(filelist[i].isDirectory())
+                        str += "<폴더>" + filelist[i].toString() + "\n";
+                    else
+                        str += "<파일>" + filelist[i].toString()+ "\n";
+                }
+                e1.setText(str);
+                Toast.makeText(getApplicationContext(),"파일 목록 가져오기 성공",Toast.LENGTH_SHORT).show();
                 break;
 
         }
